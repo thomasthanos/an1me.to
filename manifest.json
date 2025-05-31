@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "an1me.to Speed Control",
+  "version": "2.1",
+  "description": "Διαλέγεις ταχύτητα από το menu, ενεργοποιείται με F7.",
+"icons": {
+  "16": "icon16.png",
+  "32": "icon32.png",
+  "192": "icon192.png",
+  "512": "icon512.png"
+},
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": true
+    }
+  ],
+"action": {
+  "default_popup": "popup.html",
+  "default_icon": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "192": "icon192.png",
+    "512": "icon512.png"
+  }
+},
+  "permissions": ["storage"]
+}
