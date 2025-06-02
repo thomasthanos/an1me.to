@@ -1,122 +1,230 @@
-<!DOCTYPE html>
-<html lang="el">
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Πολιτική Απορρήτου - an1me.to Speed Control</title>
-  <meta name="description" content="Πολιτική απορρήτου για το Chrome extension an1me.to Speed Control.">
-  <link rel="icon" type="image/png" href="icon192.png">
-  <style>
-    body {
-      background: linear-gradient(135deg, #1a1c2c 0%, #2a2e45 100%);
-      color: #e0e7ff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .policy-container {
-      background: rgba(26,28,44,0.98);
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.33);
-      max-width: 470px;
-      padding: 32px 24px 20px 24px;
-      margin: 32px 0;
-      width: 95%;
-      animation: fadeIn 0.7s cubic-bezier(.61,-0.02,.42,1.05);
-    }
-    .policy-container h1 {
-      color: #60a5fa;
-      font-size: 2.2em;
-      margin-bottom: 18px;
-      text-align: center;
-      letter-spacing: 0.5px;
-      text-shadow: 0 2px 8px #0a101a40;
-    }
-    .policy-container h2 {
-      color: #93c5fd;
-      font-size: 1.1em;
-      margin-top: 1.7em;
-      margin-bottom: 0.7em;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-    }
-    .policy-container p {
-      font-size: 1em;
-      color: #d1d5f0;
-      line-height: 1.6;
-      margin-bottom: 1.2em;
-    }
-    .contact-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1em;
-      margin-top: 0.7em;
-    }
-    .copy-btn {
-      background: linear-gradient(135deg, #2563eb 60%, #60a5fa 100%);
-      color: #fff;
-      font-weight: 600;
-      border: none;
-      border-radius: 8px;
-      padding: 6px 13px;
-      cursor: pointer;
-      font-size: 0.98em;
-      box-shadow: 0 2px 10px #161b2a44;
-      transition: background 0.18s, transform 0.16s;
-    }
-    .copy-btn:active {
-      background: linear-gradient(135deg, #3b82f6 60%, #2563eb 100%);
-      transform: scale(0.98);
-    }
-    @media (max-width: 560px) {
-      .policy-container {
-        max-width: 99vw;
-        padding: 20px 4vw 15px 4vw;
-      }
-      .policy-container h1 {
-        font-size: 1.3em;
-      }
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: scale(0.98);}
-      100% { opacity: 1; transform: scale(1);}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <style>
+        :root {
+            --primary: #ff00cc;
+            --primary-dark: #cc00a3;
+            --primary-light: #ff66ff;
+            --secondary: #00ccff;
+            --text: #ffffff;
+            --text-light: #b8c2d9;
+            --bg: #0a0a12;
+            --bg-dark: #07070e;
+            --card-bg: rgba(26, 26, 46, 0.7);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg), var(--bg-dark));
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px;
+            padding: 30px;
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.8), rgba(46, 46, 78, 0.6));
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 204, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            transform: translateZ(30px) rotateX(2deg);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateZ(30px) rotateX(2deg) translateY(0); }
+            50% { transform: translateZ(30px) rotateX(2deg) translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+            text-shadow: 0 0 15px var(--primary-light);
+            transform: translateZ(20px);
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--primary-light);
+            text-shadow: 0 0 10px var(--primary-light);
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px 0 10px;
+            color: var(--text);
+            text-shadow: 0 0 8px var(--primary);
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            transform: translateZ(10px);
+        }
+
+        .contact-section {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateZ(15px);
+        }
+
+        .contact-section a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            text-shadow: 0 0 8px var(--secondary);
+            transition: color 0.3s ease;
+        }
+
+        .contact-section a:hover {
+            color: var(--secondary-dark);
+            text-shadow: 0 0 12px var(--secondary-dark);
+        }
+
+        .copy-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 16px rgba(255, 0, 204, 0.4), inset 0 2px 8px rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .copy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(255, 0, 204, 0.6);
+            background: linear-gradient(135deg, var(--primary), #ff0099);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(255, 0, 204, 0.4);
+        }
+
+        .copy-button.copied::after {
+            content: '✓ Copied!';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--success);
+            font-size: 14px;
+            text-shadow: 0 0 8px var(--success);
+            animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-  <div class="policy-container">
-    <h1>Πολιτική Απορρήτου</h1>
-    <p><b>an1me.to Speed Control</b> – Chrome Extension</p>
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <h2>Auto Liker for Tinder & Boo – Chrome Extension</h2>
 
-    <h2>Τι δεδομένα συλλέγουμε;</h2>
-    <p>Η επέκταση <b>an1me.to Speed Control</b> <u>δεν συλλέγει</u> και <u>δεν διαμοιράζεται</u> προσωπικά δεδομένα χρήστη. Η μόνη πληροφορία που αποθηκεύεται είναι η προτίμηση ταχύτητας βίντεο, τοπικά στον browser σας μέσω του Chrome Storage API (<b>chrome.storage.local</b>).</p>
+        <h3>What data do we collect?</h3>
+        <p>The Auto Liker for Tinder & Boo extension does not collect or share personal user data. The only information stored is the number of "Likes" (likeCount) and the activation status (isActive), which are saved locally in your browser using the Chrome Storage API (chrome.storage.local).</p>
 
-    <h2>Πώς χρησιμοποιούνται τα δεδομένα;</h2>
-    <p>Η προτίμηση ταχύτητας χρησιμοποιείται αποκλειστικά για να προσφέρει την επιλεγμένη εμπειρία αναπαραγωγής στα βίντεο του <b>an1me.to</b>. Τα δεδομένα δεν αποστέλλονται ή κοινοποιούνται σε τρίτους ή οποιοδήποτε διακομιστή.</p>
+        <h3>How is the data used?</h3>
+        <p>The data (number of Likes and activation status) is used solely to display the progress and status of the Auto Like feature on the Tinder and Boo platforms. This data is not sent or shared with third parties or any servers.</p>
 
-    <h2>Πρόσβαση και διαγραφή</h2>
-    <p>Όλες οι ρυθμίσεις διατηρούνται αποκλειστικά στον browser του χρήστη και μπορούν να διαγραφούν ανά πάσα στιγμή με την απεγκατάσταση της επέκτασης ή/και καθαρισμό των δεδομένων του Chrome.</p>
+        <h3>Access and deletion</h3>
+        <p>All settings and data are stored exclusively in the user's browser and can be deleted at any time by uninstalling the extension or clearing Chrome's data.</p>
 
-    <h2>Επικοινωνία</h2>
-    <p>Για ερωτήσεις ή απορίες σχετικά με την ιδιωτικότητά σας, μπορείτε να επικοινωνήσετε μαζί μας:</p>
-    <div class="contact-row">
-      <span id="email-text">thomasthanos28@gmail.com</span>
-      <button class="copy-btn" onclick="copyMail()">Αντιγραφή email</button>
-      <span id="copied" style="color:#60fa95;display:none">✓</span>
+        <h3>Contact</h3>
+        <p class="contact-section">
+            For questions or concerns regarding your privacy, you can contact us at: 
+            <a href="mailto:[email protected]">[email protected]</a>
+            <button class="copy-button" onclick="copyEmail()">Copy Email</button>
+        </p>
     </div>
+
     <script>
-      function copyMail() {
-        const email = document.getElementById('email-text').innerText;
-        navigator.clipboard.writeText(email);
-        document.getElementById('copied').style.display = 'inline';
-        setTimeout(()=>{ document.getElementById('copied').style.display = 'none'; },1300);
-      }
+        function copyEmail() {
+            navigator.clipboard.writeText('[email protected]').then(() => {
+                const button = document.querySelector('.copy-button');
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy email: ', err);
+            });
+        }
     </script>
-  </div>
 </body>
 </html>
