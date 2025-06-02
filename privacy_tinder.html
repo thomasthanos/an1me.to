@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Πολιτική Απορρήτου - an1me.to Speed Control</title>
+  <meta name="description" content="Πολιτική απορρήτου για το Chrome extension an1me.to Speed Control.">
+  <link rel="icon" type="image/png" href="icon192.png">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1a1c2c 0%, #2a2e45 100%);
+      color: #e0e7ff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .policy-container {
+      background: rgba(26,28,44,0.98);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.33);
+      max-width: 470px;
+      padding: 32px 24px 20px 24px;
+      margin: 32px 0;
+      width: 95%;
+      animation: fadeIn 0.7s cubic-bezier(.61,-0.02,.42,1.05);
+    }
+    .policy-container h1 {
+      color: #60a5fa;
+      font-size: 2.2em;
+      margin-bottom: 18px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px #0a101a40;
+    }
+    .policy-container h2 {
+      color: #93c5fd;
+      font-size: 1.1em;
+      margin-top: 1.7em;
+      margin-bottom: 0.7em;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    .policy-container p {
+      font-size: 1em;
+      color: #d1d5f0;
+      line-height: 1.6;
+      margin-bottom: 1.2em;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1em;
+      margin-top: 0.7em;
+    }
+    .copy-btn {
+      background: linear-gradient(135deg, #2563eb 60%, #60a5fa 100%);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 13px;
+      cursor: pointer;
+      font-size: 0.98em;
+      box-shadow: 0 2px 10px #161b2a44;
+      transition: background 0.18s, transform 0.16s;
+    }
+    .copy-btn:active {
+      background: linear-gradient(135deg, #3b82f6 60%, #2563eb 100%);
+      transform: scale(0.98);
+    }
+    @media (max-width: 560px) {
+      .policy-container {
+        max-width: 99vw;
+        padding: 20px 4vw 15px 4vw;
+      }
+      .policy-container h1 {
+        font-size: 1.3em;
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.98);}
+      100% { opacity: 1; transform: scale(1);}
+    }
+  </style>
+</head>
+<body>
+  <div class="policy-container">
+    <h1>Πολιτική Απορρήτου</h1>
+    <p><b>an1me.to Speed Control</b> – Chrome Extension</p>
+
+    <h2>Τι δεδομένα συλλέγουμε;</h2>
+    <p>Η επέκταση <b>an1me.to Speed Control</b> <u>δεν συλλέγει</u> και <u>δεν διαμοιράζεται</u> προσωπικά δεδομένα χρήστη. Η μόνη πληροφορία που αποθηκεύεται είναι η προτίμηση ταχύτητας βίντεο, τοπικά στον browser σας μέσω του Chrome Storage API (<b>chrome.storage.local</b>).</p>
+
+    <h2>Πώς χρησιμοποιούνται τα δεδομένα;</h2>
+    <p>Η προτίμηση ταχύτητας χρησιμοποιείται αποκλειστικά για να προσφέρει την επιλεγμένη εμπειρία αναπαραγωγής στα βίντεο του <b>an1me.to</b>. Τα δεδομένα δεν αποστέλλονται ή κοινοποιούνται σε τρίτους ή οποιοδήποτε διακομιστή.</p>
+
+    <h2>Πρόσβαση και διαγραφή</h2>
+    <p>Όλες οι ρυθμίσεις διατηρούνται αποκλειστικά στον browser του χρήστη και μπορούν να διαγραφούν ανά πάσα στιγμή με την απεγκατάσταση της επέκτασης ή/και καθαρισμό των δεδομένων του Chrome.</p>
+
+    <h2>Επικοινωνία</h2>
+    <p>Για ερωτήσεις ή απορίες σχετικά με την ιδιωτικότητά σας, μπορείτε να επικοινωνήσετε μαζί μας:</p>
+    <div class="contact-row">
+      <span id="email-text">thomasthanos28@gmail.com</span>
+      <button class="copy-btn" onclick="copyMail()">Αντιγραφή email</button>
+      <span id="copied" style="color:#60fa95;display:none">✓</span>
+    </div>
+    <script>
+      function copyMail() {
+        const email = document.getElementById('email-text').innerText;
+        navigator.clipboard.writeText(email);
+        document.getElementById('copied').style.display = 'inline';
+        setTimeout(()=>{ document.getElementById('copied').style.display = 'none'; },1300);
+      }
+    </script>
+  </div>
+</body>
+</html>
